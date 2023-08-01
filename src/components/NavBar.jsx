@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import axios from 'axios';
 
 import { useState} from "react"
 
@@ -11,6 +12,12 @@ function mainNavbar() {
   const handleSelect = (eventKey) => {
     console.log('選中的值：', eventKey);
     setCity(eventKey)
+    getRubbishTruckPositions()
+  }
+  const getRubbishTruckPositions = async() =>{
+    const url =` https://data.ntpc.gov.tw/api/datasets/${import.meta.env.VITE_RUBBISH_TRUCK_TOKEN}/json`
+    const responseData = await axios.get(url)
+    console.log(responseData)
   }
 
   return (
