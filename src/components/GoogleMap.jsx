@@ -1,12 +1,21 @@
 import GoogleMapReact from "google-map-react"
 import { useEffect, useState } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+
 
 const AnyReactComponent = ({text})=>{
-  return <div>{text}</div>
+  const element = <FontAwesomeIcon icon={faCoffee} />
+  const elementSTyle = {
+    height: '30px',
+    width: '30px'
+  }
+  return <div>測試文字</div>
 }
 
 function Googlemap(){
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 25.0330, lng: 121.5654 })
   useEffect(()=>{
   
     // 使用 Geolocation API 取得目前位置
@@ -15,7 +24,8 @@ function Googlemap(){
         (position) => {
             const {latitude, longitude} = position.coords;
             setCurrentLocation({lat: latitude, lng: longitude})
-            console.log(currentLocation)
+            setMapCenter({lat: latitude, lng: longitude})
+            console.log('currentLocation', currentLocation, 'mapCenter', mapCenter)
         },
         (error) => {
           console.log('取得目前位置失敗:', error.message)
@@ -29,44 +39,34 @@ function Googlemap(){
   const center = currentLocation ? currentLocation : { lat: 25.0330, lng: 121.5654 };
 
   const reactkey = import.meta.env.VITE_APP_KEY;
-  // 設置地圖中心點位置
-  // const center = {
-  //   lat: 25.0330,
-  //   lng: 121.5654
-  // }
-  // const truckPosition = {
-  //   lat: 25.0456,
-  //   lng: 121.5238
-  // }
-
-  // const location1Position = {
-  //   lat: 25.0372,
-  //   lng: 121.4986
-  // };
-
-  // // 範例垃圾車位置
-  // const garbageTruckPosition = {
-  //   lat: 25.0456,
-  //   lng: 121.5238
-  // }
 
   return (
     <div style={{ height: 'calc(100vh - 58px)', width: '96vw' }}>
+      {currentLocation? (
       <GoogleMapReact
         bootstrapURLKeys={{key: reactkey}}
-        defaultCenter={center}
+        defaultCenter={mapCenter}
         defaultZoom={14}
+        onChange={(event)=>{
+          console.log('event.center', event.center);
+          setMapCenter(event.center)
+        }} // 監聽中心點位置
       >
         {/* 在地圖上標記目前位置 */}
         {currentLocation && (
           <AnyReactComponent
-            lat={currentLocation.lat}
-            lng={currentLocation.lng}
+            lat={mapCenter.lat}
+            lng={mapCenter.lng}
             text="目前位置"
           />
         )}
 
       </GoogleMapReact>
+
+      ):(
+        <div>等待取得目前位置...</div>
+      )
+    }
     </div>
   )
 }
