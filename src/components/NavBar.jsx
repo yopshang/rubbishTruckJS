@@ -3,7 +3,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
+import { useState} from "react"
+
 function mainNavbar() {
+  const [city, setCity] = useState("城市")
+
+  const handleSelect = (eventKey) => {
+    console.log('選中的值：', eventKey);
+    setCity(eventKey)
+  }
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -11,15 +20,13 @@ function mainNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            {/* <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link> */}
-
-            <NavDropdown title="城市" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">台北</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
+            <NavDropdown title={city} id="basic-nav-dropdown"
+              onSelect={handleSelect}>
+              <NavDropdown.Item eventKey="台北">台北</NavDropdown.Item>
+              <NavDropdown.Item eventKey="新北">
                 新北
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">桃園</NavDropdown.Item>
+              <NavDropdown.Item eventKey="桃園">桃園</NavDropdown.Item>
 
             </NavDropdown>
 
