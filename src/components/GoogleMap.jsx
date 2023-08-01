@@ -1,23 +1,22 @@
 import GoogleMapReact from "google-map-react"
-import { useEffect, useState } from "react"
+import { useEffect, useState} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 
-const Marker = ({text})=>{
-  const element = <FontAwesomeIcon icon={faCoffee} />
+const Marker = ({ text, lat, lng }) => {
+  const element = <FontAwesomeIcon icon={faCoffee} />;
   return (
     <div>
-      {
-        <div>{element}{text}</div>
-      }
+      {<div>{element}{text}</div>}
     </div>
-    )
+  );
 }
 
-function Googlemap(){
+function Googlemap (){
   const [currentLocation, setCurrentLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState({ lat: 25.0330, lng: 121.5654 })
+
   useEffect(()=>{
   
     // 使用 Geolocation API 取得目前位置
@@ -48,20 +47,26 @@ function Googlemap(){
         bootstrapURLKeys={{key: reactkey}}
         defaultCenter={mapCenter}
         defaultZoom={14}
-        onChange={(event)=>{
-          console.log('currentLocation', currentLocation, 'mapCenter', mapCenter);
-
-        }} // 監聽中心點位置
+        onZoomAnimationStart={()=>{
+          console.log('偵測到開始縮放')
+        }}
+        onZoomAnimationEnd={()=>{
+          console.log('偵測到結束縮放')
+        }}
       >
-        {/* 在地圖上標記目前位置 */}
-        
-          <Marker
-          text="目前位置"
-          lat={currentLocation.lat}
-          lng={currentLocation.lng}
-          />
+        {/* 在地圖上標記一個位置 */}
+        <Marker
+          lat={25.0511929}
+          lng={121.5940662}
+          text="這裡是一個標記"
+        />
 
-
+        {/* 在地圖上標記另一個位置 */}
+        <Marker
+          lat={25.0375}
+          lng={121.5637}
+          text="另一個標記位置"
+        />
       </GoogleMapReact>
 
       ):(
@@ -69,7 +74,6 @@ function Googlemap(){
       )
     }
     </div>
-  )
-}
+  )}
 
 export default Googlemap
