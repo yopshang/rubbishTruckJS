@@ -4,13 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 
-const AnyReactComponent = ({text})=>{
+const Marker = ({text})=>{
   const element = <FontAwesomeIcon icon={faCoffee} />
-  const elementSTyle = {
-    height: '30px',
-    width: '30px'
-  }
-  return <div>測試文字</div>
+  return (
+    <div>
+      {
+        <div>{element}{text}</div>
+      }
+    </div>
+    )
 }
 
 function Googlemap(){
@@ -36,7 +38,6 @@ function Googlemap(){
     }
   }, [])
 
-  const center = currentLocation ? currentLocation : { lat: 25.0330, lng: 121.5654 };
 
   const reactkey = import.meta.env.VITE_APP_KEY;
 
@@ -48,18 +49,18 @@ function Googlemap(){
         defaultCenter={mapCenter}
         defaultZoom={14}
         onChange={(event)=>{
-          console.log('event.center', event.center);
-          setMapCenter(event.center)
+          console.log('currentLocation', currentLocation, 'mapCenter', mapCenter);
+
         }} // 監聽中心點位置
       >
         {/* 在地圖上標記目前位置 */}
-        {currentLocation && (
-          <AnyReactComponent
-            lat={mapCenter.lat}
-            lng={mapCenter.lng}
-            text="目前位置"
+        
+          <Marker
+          text="目前位置"
+          lat={currentLocation.lat}
+          lng={currentLocation.lng}
           />
-        )}
+
 
       </GoogleMapReact>
 
